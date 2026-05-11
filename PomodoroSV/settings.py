@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pomodoro.apps.PomodoroConfig',
+    'pomodoro.apps.PomodoroConfig',#o solo pomodoro y PomodoroCongig se llama la clase en apps.py
 ]
 
 MIDDLEWARE = [
@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'PomodoroSV.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'pomodorosv',
+        'USER': 'root',
+        'PASSWORD': 'hola1234',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
