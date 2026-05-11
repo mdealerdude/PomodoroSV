@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -77,11 +78,11 @@ WSGI_APPLICATION = 'PomodoroSV.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pomodorosv',
-        'USER': 'root',
-        'PASSWORD': 'hola1234',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': 'DB_NAME',
+        'USER': 'DB_USER',
+        'PASSWORD': 'DB_PASSWORD',
+        'HOST': 'DB_HOST',
+        'PORT': 'DB_PORT',
     }
 }
 
