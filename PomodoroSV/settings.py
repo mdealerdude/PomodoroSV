@@ -78,11 +78,11 @@ WSGI_APPLICATION = 'PomodoroSV.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DB_NAME',
-        'USER': 'DB_USER',
-        'PASSWORD': 'DB_PASSWORD',
-        'HOST': 'DB_HOST',
-        'PORT': 'DB_PORT',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', cast=int),
     }
 }
 
