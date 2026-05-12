@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pomodoro.apps.PomodoroConfig',#o solo pomodoro y PomodoroCongig se llama la clase en apps.py
+    'materias.apps.MateriasConfig',
+    'usuarios.apps.UsuariosConfig',
+    'estadisticas.apps.EstadisticasConfig'
 ]
 
 MIDDLEWARE = [
