@@ -11,14 +11,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-<<<<<<< HEAD
+
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
-=======
+
 from decouple import config
->>>>>>> b04160fdf2587b244ea07d112f43e36c81529455
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -88,22 +88,13 @@ WSGI_APPLICATION = 'PomodoroSV.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-<<<<<<< HEAD
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-=======
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT', cast=int),
->>>>>>> b04160fdf2587b244ea07d112f43e36c81529455
     }
 } 
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
