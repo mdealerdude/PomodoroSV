@@ -4,6 +4,8 @@ from . import views
 #Lo hago asi porque de las dos formas es valido
 
 urlpatterns=[
-    path('', views.index),
     path('registro/', views.register),
+    path("", views.inicio_sesion, name="login"),
+    path("home/", views.home, name="home"),
 ]
+
