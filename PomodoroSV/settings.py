@@ -11,10 +11,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+<<<<<<< HEAD
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
+=======
+from decouple import config
+>>>>>>> b04160fdf2587b244ea07d112f43e36c81529455
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -42,7 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pomodoro.apps.PomodoroConfig',
+    'pomodoro.apps.PomodoroConfig',#o solo pomodoro y PomodoroCongig se llama la clase en apps.py
+    'materias.apps.MateriasConfig',
+    'usuarios.apps.UsuariosConfig',
+    'estadisticas.apps.EstadisticasConfig'
 ]
 
 MIDDLEWARE = [
@@ -81,11 +88,19 @@ WSGI_APPLICATION = 'PomodoroSV.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+<<<<<<< HEAD
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
+=======
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', cast=int),
+>>>>>>> b04160fdf2587b244ea07d112f43e36c81529455
     }
 } 
 
