@@ -1,8 +1,10 @@
-from django.http import HttpResponse
+
+
+
+from django.contrib.auth.models import User
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-#from materias.urls import 
 
 """"""
 def inicio_sesion(request):
@@ -28,9 +30,38 @@ def home(request):
 
 
 def register(request):
-    
-    return render(request, 'register.html')
 
+    if request.method == "POST":
+
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        # Validar contraseñas
+        if password != confirm_password:
+            return render(request, "register.html", {
+                "error": "Las contraseñas no coinciden"
+            })
+
+        # Validar si usuario ya existe
+        if User.objects.filter(username=username).exists():
+            return render(request, "register.html", {
+                "error": "El usuario ya existe"
+            })
+
+        # Crear usuario
+        usuario = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        usuario.save()
+
+        return redirect("index")
+
+    return render(request, "register.html")
 
 def cerrar_sesion(request):
 
