@@ -2,23 +2,174 @@
 
 {% block content %}
 
+<style>
+    .tarjeta-materia{
+    background:#efefe8;
+    border-radius:30px;
+    padding:30px;
+    transition:0.3s;
+    border:4px solid transparent;
+}
+
+.tarjeta-materia:hover{
+    transform:translateY(-5px);
+}
+
+.materia-seleccionada{
+    border-color:#146c36;
+}
+
+.acciones-materia{
+    margin-top:25px;
+    display:flex;
+    gap:15px;
+}
+
+.btn-seleccionar,
+.btn-editar,
+.btn-eliminar{
+    border:none;
+    padding:14px 22px;
+    border-radius:15px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+    color:white;
+}
+
+.btn-seleccionar{
+    background:#146c36;
+}
+
+.btn-editar{
+    background:#7dd3fc;
+    color:#0f172a;
+}
+
+.btn-eliminar{
+    background:#dc2626;
+}
+
+.btn-seleccionar:hover,
+.btn-editar:hover,
+.btn-eliminar:hover{
+    transform:scale(1.05);
+}
+
+.acciones-superiores{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.btn-editar{
+    background:#7dd3fc;
+    border:none;
+    padding:18px 30px;
+    border-radius:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn-eliminar{
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:18px 30px;
+    border-radius:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.tarjeta-materia{
+    cursor:pointer;
+    border:4px solid transparent;
+    transition:0.3s;
+}
+
+.tarjeta-materia:hover{
+    transform:translateY(-5px);
+}
+
+.materia-seleccionada{
+    border-color:#146c36;
+}
+
+.btn-seleccionar{
+    margin-top:25px;
+    width:100%;
+    padding:16px 20px;
+
+    background:#146c36;
+    color:white;
+
+    border:none;
+    border-radius:18px;
+
+    font-size:18px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all 0.3s ease;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    box-shadow:0 6px 15px rgba(20, 108, 54, 0.25);
+}
+
+.btn-seleccionar:hover{
+    background:#0f572b;
+    transform:translateY(-3px);
+}
+
+.btn-seleccionar:active{
+    transform:scale(0.98);
+}
+</style>
+
 <div class="titulo">
-    <h1>Subjects</h1>
-    <p>Organize your academic disciplines</p>
+    <h1>Materias</h1>
+    <p>Organiza tus materias</p>
 </div>
 
 <div class="header-materias">
 
     <div>
-        <p style="color:#7da06d; font-weight:600;">ACADEMIC PORTFOLIO</p>
-        <h2 style="font-size:50px; margin-top:10px;">Active Subjects</h2>
+        <p style="color:#7da06d; font-weight:600;">Portafolio Academico</p>
+        <h2 style="font-size:50px; margin-top:10px;">Materias Activas</h2>
     </div>
 
-    <div>
-        <a href="{% url 'crear_materia' %}" class="boton-azul">
-            + Add New Subject
-        </a>
-    </div>
+    <div class="acciones-superiores">
+
+    <a id="btnEditar" href="#">
+        <button class="btn-editar">
+            Editar
+        </button>
+    </a>
+
+    <form id="formEliminar" method="POST">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn-eliminar"
+            onclick="return confirm('¿Deseas eliminar la materia?')">
+
+            Eliminar
+
+        </button>
+
+    </form>
+
+    <a href="{% url 'crear_materia' %}" class="boton-azul">
+        + Nueva Materia
+    </a>
+
+</div>
 
 </div>
 
@@ -26,24 +177,31 @@
 
     {% for materia in materias %}
 
-    <div class="card">
+   <div class="tarjeta-materia" id="tarjeta-{{ materia.id }}">
 
-        <div class="icono">
-            {{ materia.icono }}
-        </div>
-
-        <h2>{{ materia.nombre }}</h2>
-
-        <div>
-            <span class="horas">{{ materia.horas_obj_sem }}</span>
-            <span class="texto-horas"> HOURS STUDIED</span>
-        </div>
-
-        <div class="barra">
-            <div class="progreso" style="width: 70%;"></div>
-        </div>
-
+    <div class="icono">
+        {{ materia.icono }}
     </div>
+
+    <h2>{{ materia.nombre }}</h2>
+
+    <h3>
+        {{ materia.horas_obj_sem }} HORAS/SEMANA
+    </h3>
+
+
+
+    <button
+        class="btn-seleccionar"
+        onclick="seleccionarMateria({{ materia.id }})">
+
+        Seleccionar
+
+    </button>
+
+   
+
+</div>
 
     {% empty %}
 
@@ -52,5 +210,32 @@
     {% endfor %}
 
 </div>
+<script>
 
+    let materiaSeleccionada = null
+
+    function seleccionarMateria(id){
+
+        materiaSeleccionada = id
+
+        const tarjetas = document.querySelectorAll('.tarjeta-materia')
+
+        tarjetas.forEach(tarjeta => {
+            tarjeta.classList.remove('materia-seleccionada')
+        })
+
+        document
+            .getElementById(`tarjeta-${id}`)
+            .classList.add('materia-seleccionada')
+
+        document
+            .getElementById('btnEditar')
+            .href = `/materias/editar_materia/${id}/`
+
+        document
+            .getElementById('formEliminar')
+            .action = `/materias/eliminar_materia/${id}/`
+    }
+
+</script>
 {% endblock %}

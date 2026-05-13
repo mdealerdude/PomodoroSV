@@ -118,7 +118,7 @@
             border-radius:40px;
             font-weight:600;
             display:inline-block;
-            border:3px dashed #9fc4ff;
+            border:none;
             transition:0.3s;
         }
 
@@ -237,6 +237,20 @@
             background:#096d30;
         }
 
+        .btn-logout{
+    background:#dc2626;
+    color:white;
+    padding:14px 24px;
+    border-radius:15px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.btn-logout:hover{
+    background:#b91c1c;
+}
+
     </style>
     </head>
 <body>
@@ -252,18 +266,17 @@
                 </div>
 
                 <div class="menu">
-                    <a href="#">Dashboard</a>
                     <a href="#">Timer</a>
-                    <a href="#">Subjects</a>
-                    <a href="#">Statistics</a>
+                    <a href="{% url 'materias' %}">Subjects</a>
                 </div>
 
             </div>
 
-            <div class="footer-sidebar">
-                <a href="#">Settings</a>
-                <a href="#">Support</a>
-            </div>
+            <a href="{% url 'logout' %}" class="btn-logout">
+
+                Cerrar Sesión
+
+            </a>
 
         </aside>
 

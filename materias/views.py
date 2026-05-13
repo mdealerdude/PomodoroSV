@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Materia
+from django.shortcuts import get_object_or_404
 
 
 def mostrar_materias(request):
@@ -32,3 +33,42 @@ def crear_materia(request):
         return redirect('materias')
 
     return render(request, 'crear_materia.html')
+
+
+
+def eliminar_materia(request, id):
+
+    materia = get_object_or_404(
+        Materia,
+        id=id,
+        usuario=request.user
+    )
+
+    if request.method == 'POST':
+
+        materia.delete()
+
+    return redirect('materias')
+
+def editar_materia(request, id):
+
+    materia = get_object_or_404(
+        Materia,
+        id=id,
+        usuario=request.user
+    )
+
+    if request.method == 'POST':
+
+        materia.nombre = request.POST['nombre']
+        materia.color = request.POST['color']
+        materia.icono = request.POST['icono']
+        materia.horas_obj_sem = request.POST['horas_obj_sem']
+
+        materia.save()
+
+        return redirect('materias')
+
+    return render(request, 'editar_materia.html', {
+        'materia': materia
+    })
