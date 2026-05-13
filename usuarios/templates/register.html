@@ -251,15 +251,15 @@
 
             <div class="logo">
                 <i class="bi bi-book-half"></i>
-                The Focused Academic
+                PomodoroSV
             </div>
 
             <div class="quote">
                 <h2>
-                    "The soul that sees beauty may sometimes walk alone."
+                    "El éxito no cae del cielo. Requiere mucha lucha, esfuerzo, estudio y fuerza de voluntad."
                 </h2>
 
-                <span>THE STUDY RITUAL</span>
+                <span>El ritual del estudio</span>
             </div>
 
             <div class="socials">
@@ -289,14 +289,21 @@
                     Diseña tu entorno ideal para el aprendizaje profundo.
                 </p>
 
-                <form method="POST">
+                {% if error %}
+                    <div class="alert alert-danger">
+                {{ error }}
+                    </div>
+                {% endif %}
 
+                <form method="POST">
+                    {% csrf_token %}
                     <label class="form-label">
                         NOMBRE DE USUARIO
                     </label>
 
                     <div class="input-group">
                         <input type="text"
+                               name="username"
                                class="form-control"
                                placeholder="o. ej. acad_spirit">
 
@@ -311,6 +318,7 @@
 
                     <div class="input-group">
                         <input type="email"
+                                name="email"
                                class="form-control"
                                placeholder="estudiante@universitas.edu">
 
@@ -325,6 +333,7 @@
 
                     <div class="input-group">
                         <input type="password"
+                                name="password"
                                class="form-control"
                                placeholder="••••••••">
 
@@ -339,6 +348,7 @@
 
                     <div class="input-group">
                         <input type="password"
+                                name="confirm_password"
                                class="form-control"
                                placeholder="••••••••">
 
@@ -348,7 +358,7 @@
                     </div>
 
                     <button type="submit" class="btn-register">
-                        Empezar Ritual
+                        Registrar usuario
                     </button>
 
                 </form>
@@ -365,7 +375,7 @@
                 </div>
 
                 <div class="copyright">
-                    © GRUPO 1D TODOS LOS DERECHOS
+                    © GRUPO 10 TODOS LOS DERECHOS
                 </div>
 
             </div>
