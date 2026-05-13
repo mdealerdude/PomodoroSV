@@ -2,6 +2,7 @@ from django.http import HttpResponse
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+#from materias.urls import 
 
 """"""
 def inicio_sesion(request):
@@ -13,7 +14,7 @@ def inicio_sesion(request):
 
         if usuario is not None:
             login(request, usuario)
-            return redirect("home")
+            return redirect("materias/materias.html")
         else:
             return render(request, "index.html", {
                 "error": "Usuario o contraseña incorrectos"
@@ -23,7 +24,7 @@ def inicio_sesion(request):
 
 
 def home(request):
-    return render(request, "home.html") 
+    return render(request, "/materias/materias.html") 
 
 
 def register(request):

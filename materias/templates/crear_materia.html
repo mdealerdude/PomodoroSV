@@ -1,0 +1,376 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .contenedor-crear{
+        padding:40px;
+        display:flex;
+        gap:40px;
+    }
+
+    .lado-izquierdo{
+        flex:2;
+    }
+
+    .lado-derecho{
+        flex:1;
+        background:#efefe7;
+        border-radius:25px;
+        padding:30px;
+        height:fit-content;
+    }
+
+    .titulo-pagina{
+        display:flex;
+        align-items:center;
+        gap:15px;
+        margin-bottom:40px;
+    }
+
+    .boton-regresar{
+        width:55px;
+        height:55px;
+        border-radius:50%;
+        border:2px dashed #8ab4ff;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-size:24px;
+        color:#1f5f38;
+        text-decoration:none;
+    }
+
+    .titulo-pagina h1{
+        color:#146c36;
+        font-size:42px;
+    }
+
+    .grupo-input{
+        margin-bottom:35px;
+    }
+
+    .grupo-input label{
+        display:block;
+        margin-bottom:12px;
+        font-size:14px;
+        font-weight:bold;
+        letter-spacing:2px;
+        color:#3d3d3d;
+    }
+
+    .grupo-input input{
+        width:100%;
+        padding:24px;
+        border:none;
+        outline:none;
+        border-radius:18px;
+        background:#ecece4;
+        font-size:20px;
+    }
+
+    .disciplinas{
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:20px;
+        margin-top:20px;
+    }
+
+    .disciplina{
+        background:#ecece4;
+        border-radius:20px;
+        height:130px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        cursor:pointer;
+        transition:0.3s;
+        border:3px solid transparent;
+    }
+
+    .disciplina:hover{
+        transform:translateY(-5px);
+        border-color:#146c36;
+    }
+
+    .disciplina span{
+        font-size:45px;
+        margin-bottom:10px;
+    }
+
+    .disciplina h3{
+        font-size:22px;
+    }
+
+    .titulo-panel{
+        font-size:14px;
+        font-weight:bold;
+        letter-spacing:2px;
+        margin-bottom:25px;
+        color:#3d3d3d;
+    }
+
+    .colores{
+        display:flex;
+        flex-wrap:wrap;
+        gap:18px;
+        margin-bottom:35px;
+    }
+
+    .color-radio{
+        display:none;
+    }
+
+    .color-label{
+        width:50px;
+        height:50px;
+        border-radius:50%;
+        cursor:pointer;
+        border:4px solid transparent;
+        transition:0.3s;
+    }
+
+    .color-radio:checked + .color-label{
+        border-color:#d9d9d9;
+        transform:scale(1.1);
+    }
+
+    .iconos{
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:15px;
+        margin-bottom:35px;
+    }
+
+    .icono-radio{
+        display:none;
+    }
+
+    .icono-label{
+        background:white;
+        border-radius:18px;
+        height:70px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-size:28px;
+        cursor:pointer;
+        border:2px solid transparent;
+        transition:0.3s;
+    }
+
+    .icono-radio:checked + .icono-label{
+        border-color:#5e9cff;
+        background:#eef5ff;
+    }
+
+    .preview-card{
+        background:white;
+        border-radius:25px;
+        padding:25px;
+        margin-top:25px;
+    }
+
+    .preview-icono{
+        width:60px;
+        height:60px;
+        border-radius:15px;
+        background:#eef5ff;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-size:28px;
+        margin-bottom:20px;
+    }
+
+    .preview-card h2{
+        margin-bottom:10px;
+    }
+
+    .barra{
+        width:100%;
+        height:8px;
+        background:#e4e4e4;
+        border-radius:10px;
+        margin-top:25px;
+    }
+
+    .progreso{
+        width:0%;
+        height:100%;
+        background:#146c36;
+        border-radius:10px;
+    }
+
+    .acciones{
+        margin-top:40px;
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .btn-crear{
+        background:#0667d0;
+        color:white;
+        border:none;
+        border-radius:40px;
+        padding:22px;
+        font-size:24px;
+        font-weight:bold;
+        cursor:pointer;
+    }
+
+    .btn-cancelar{
+        background:transparent;
+        border:2px dashed #8ab4ff;
+        border-radius:40px;
+        padding:20px;
+        font-size:20px;
+        cursor:pointer;
+    }
+
+</style>
+
+<div class="contenedor-crear">
+
+    <div class="lado-izquierdo">
+
+        <div class="titulo-pagina">
+            <a href="{% url 'materias' %}" class="boton-regresar">←</a>
+            <h1>Add New Subject</h1>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="grupo-input">
+                <label>SUBJECT NAME</label>
+                <input type="text" name="nombre" placeholder="e.g. Advanced Quantum Mechanics" required>
+            </div>
+
+            <div class="grupo-input">
+                <label>TARGET HOURS PER WEEK</label>
+                <input type="number" step="0.1" name="horas_obj_sem" placeholder="12" required>
+            </div>
+
+            <div class="grupo-input">
+                <label>ACADEMIC DISCIPLINE</label>
+
+                <div class="disciplinas">
+
+                    <div class="disciplina">
+                        <span>🧪</span>
+                        <h3>Science</h3>
+                    </div>
+
+                    <div class="disciplina">
+                        <span>🎨</span>
+                        <h3>Arts</h3>
+                    </div>
+
+                    <div class="disciplina">
+                        <span>📚</span>
+                        <h3>Humanities</h3>
+                    </div>
+
+                    <div class="disciplina">
+                        <span>∑</span>
+                        <h3>Math</h3>
+                    </div>
+
+                    <div class="disciplina">
+                        <span>💻</span>
+                        <h3>Technology</h3>
+                    </div>
+
+                    <div class="disciplina">
+                        <span>⚖️</span>
+                        <h3>Law</h3>
+                    </div>
+
+                </div>
+            </div>
+
+    </div>
+
+    <div class="lado-derecho">
+
+        <h3 class="titulo-panel">VISUAL IDENTITY</h3>
+
+        <div class="colores">
+
+            <input type="radio" name="color" value="#1565c0" id="azul" class="color-radio" checked>
+            <label for="azul" class="color-label" style="background:#1565c0"></label>
+
+            <input type="radio" name="color" value="#137d24" id="verde" class="color-radio">
+            <label for="verde" class="color-label" style="background:#137d24"></label>
+
+            <input type="radio" name="color" value="#0b7285" id="cyan" class="color-radio">
+            <label for="cyan" class="color-label" style="background:#0b7285"></label>
+
+            <input type="radio" name="color" value="#ff7b00" id="naranja" class="color-radio">
+            <label for="naranja" class="color-label" style="background:#ff7b00"></label>
+
+            <input type="radio" name="color" value="#9d4edd" id="morado" class="color-radio">
+            <label for="morado" class="color-label" style="background:#9d4edd"></label>
+
+        </div>
+
+        <div class="iconos">
+
+            <input type="radio" name="icono" value="🎓" id="i1" class="icono-radio">
+            <label for="i1" class="icono-label">🎓</label>
+
+            <input type="radio" name="icono" value="🔬" id="i2" class="icono-radio" checked>
+            <label for="i2" class="icono-label">🔬</label>
+
+            <input type="radio" name="icono" value="🌎" id="i3" class="icono-radio">
+            <label for="i3" class="icono-label">🌎</label>
+
+            <input type="radio" name="icono" value="📐" id="i4" class="icono-radio">
+            <label for="i4" class="icono-label">📐</label>
+
+            <input type="radio" name="icono" value="⚙️" id="i5" class="icono-radio">
+            <label for="i5" class="icono-label">⚙️</label>
+
+        </div>
+
+        <div class="preview-card">
+
+            <div class="preview-icono">
+                🔬
+            </div>
+
+            <h2>Quantum Mechanics</h2>
+
+            <p>12 hours / week target</p>
+
+            <div class="barra">
+                <div class="progreso"></div>
+            </div>
+
+        </div>
+
+        <div class="acciones">
+
+            <button type="submit" class="btn-crear">
+                Create Subject
+            </button>
+
+            <a href="{% url 'materias' %}">
+                <button type="button" class="btn-cancelar">
+                    Discard and Return
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="titulo">
+    <h1>Subjects</h1>
+    <p>Organize your academic disciplines</p>
+</div>
+
+<div class="header-materias">
+
+    <div>
+        <p style="color:#7da06d; font-weight:600;">ACADEMIC PORTFOLIO</p>
+        <h2 style="font-size:50px; margin-top:10px;">Active Subjects</h2>
+    </div>
+
+    <div>
+        <a href="{% url 'crear_materia' %}" class="boton-azul">
+            + Add New Subject
+        </a>
+    </div>
+
+</div>
+
+<div class="cards">
+
+    {% for materia in materias %}
+
+    <div class="card">
+
+        <div class="icono">
+            {{ materia.icono }}
+        </div>
+
+        <h2>{{ materia.nombre }}</h2>
+
+        <div>
+            <span class="horas">{{ materia.horas_obj_sem }}</span>
+            <span class="texto-horas"> HOURS STUDIED</span>
+        </div>
+
+        <div class="barra">
+            <div class="progreso" style="width: 70%;"></div>
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <p>No hay materias registradas.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
