@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import Materia
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def mostrar_materias(request):
 
     materias = Materia.objects.filter(usuario=request.user)
@@ -12,7 +14,7 @@ def mostrar_materias(request):
     })
 
 
-
+@login_required
 def crear_materia(request):
 
     if request.method == 'POST':
@@ -35,7 +37,7 @@ def crear_materia(request):
     return render(request, 'crear_materia.html')
 
 
-
+@login_required
 def eliminar_materia(request, id):
 
     materia = get_object_or_404(
@@ -50,6 +52,7 @@ def eliminar_materia(request, id):
 
     return redirect('materias')
 
+@login_required
 def editar_materia(request, id):
 
     materia = get_object_or_404(

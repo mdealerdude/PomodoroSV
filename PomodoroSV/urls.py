@@ -22,6 +22,6 @@ from pomodoro import views"""
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('usuarios.urls')),
-    path('', include('materias.urls')),
-    path('', include('pomodoro.urls')),
+    path('materias/', include('materias.urls')),
+    path('pomodoro/', include('pomodoro.urls')),
 ]

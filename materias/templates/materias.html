@@ -131,7 +131,7 @@
 </style>
 
 <div class="titulo">
-    <h1>Bienvenido {{}}</h1>
+    <h1>Bienvenido</h1>
     <p>Organiza tus materias</p>
 </div>
 
@@ -230,11 +230,11 @@
 
         document
             .getElementById('btnEditar')
-            .href = `/materias/editar_materia/${id}/`
+            .href = `editar_materia/${id}/`
 
         document
             .getElementById('formEliminar')
-            .action = `/materias/eliminar_materia/${id}/`
+            .action = `eliminar_materia/${id}/`
     }
 
 </script>
