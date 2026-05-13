@@ -1,0 +1,653 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .timer-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        position: relative;
+    }
+
+    .titulo {
+        width: 100%;
+    }
+
+    .titulo h1 {
+        color: #0c6b37;
+        font-size: 42px;
+    }
+
+    .titulo p {
+        color: #5f5f5f;
+        margin-top: 5px;
+    }
+
+    /* Botón ajustes */
+    .btn-ajustes {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: none;
+        background: #f0f0e8;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+    }
+
+    .btn-ajustes:hover {
+        background: #d9d9d0;
+        transform: rotate(45deg);
+    }
+
+    /* Selector de materia */
+    .selector-materia {
+        background: #f0f0e8;
+        border: 1px solid #d9d9d0;
+        border-radius: 20px;
+        padding: 12px 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .selector-materia span {
+        font-size: 12px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+    }
+
+    .selector-materia select {
+        border: none;
+        background: transparent;
+        font-size: 16px;
+        font-weight: 600;
+        color: #111;
+        cursor: pointer;
+        outline: none;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Tabs */
+    .tabs {
+        display: flex;
+        background: #f0f0e8;
+        border-radius: 40px;
+        padding: 5px;
+        gap: 5px;
+    }
+
+    .tab {
+        padding: 10px 25px;
+        border-radius: 40px;
+        border: none;
+        background: transparent;
+        font-size: 14px;
+        font-weight: 500;
+        color: #777;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        transition: 0.3s;
+    }
+
+    .tab.activo {
+        background: white;
+        color: #111;
+        font-weight: 600;
+    }
+
+    /* Fase */
+    .fase-texto {
+        font-size: 12px;
+        color: #888;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    /* Círculo timer */
+    .timer-circle-wrapper {
+        position: relative;
+        width: 300px;
+        height: 300px;
+    }
+
+    .timer-circle-wrapper svg {
+        transform: rotate(-90deg);
+    }
+
+    .timer-display {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .timer-display .tiempo {
+        font-size: 58px;
+        font-weight: 700;
+        color: #0c6b37;
+        line-height: 1;
+    }
+
+    .timer-display .estado-label {
+        font-size: 11px;
+        color: #888;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-top: 8px;
+    }
+
+    /* Botones */
+    .botones {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .btn-accion {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        border: none;
+        background: #f0f0e8;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+    }
+
+    .btn-accion:hover {
+        background: #d9d9d0;
+    }
+
+    .btn-start {
+        background: #0066d6;
+        color: white;
+        border: none;
+        padding: 18px 50px;
+        border-radius: 40px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-start:hover {
+        background: #0055b3;
+    }
+
+    .btn-label {
+        font-size: 11px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-overlay.activo {
+        display: flex;
+    }
+
+    .modal {
+        background: white;
+        border-radius: 30px;
+        padding: 40px;
+        width: 480px;
+        max-width: 90%;
+    }
+
+    .modal h2 {
+        font-size: 22px;
+        color: #111;
+        margin-bottom: 30px;
+    }
+
+    .modal-grupo {
+        margin-bottom: 20px;
+    }
+
+    .modal-grupo label {
+        display: block;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .modal-inputs {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .modal-inputs input {
+        width: 80px;
+        padding: 12px;
+        border: 1px solid #d9d9d0;
+        border-radius: 12px;
+        font-size: 16px;
+        font-family: 'Poppins', sans-serif;
+        text-align: center;
+        outline: none;
+    }
+
+    .modal-inputs input:focus {
+        border-color: #0c6b37;
+    }
+
+    .modal-inputs span {
+        font-size: 13px;
+        color: #888;
+    }
+
+    .modal-botones {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .btn-cancelar {
+        padding: 12px 25px;
+        border-radius: 15px;
+        border: none;
+        background: #f0f0e8;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-cancelar:hover {
+        background: #d9d9d0;
+    }
+
+    .btn-guardar-config {
+        padding: 12px 25px;
+        border-radius: 15px;
+        border: none;
+        background: #0c6b37;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-guardar-config:hover {
+        background: #096d30;
+    }
+</style>
+
+<!-- Audio -->
+<audio id="alarma" src="{% static 'sounds/alarma.mp3' %}"></audio>
+
+<!-- Form guardar sesión -->
+<form id="formGuardar" method="POST" action="{% url 'guardar_sesion' %}">
+    {% csrf_token %}
+    <input type="hidden" name="materia_id" id="inputMateriaId">
+    <input type="hidden" name="duracion_min" id="inputDuracion">
+    <input type="hidden" name="tipo" id="inputTipo">
+    <input type="hidden" name="completada" id="inputCompletada">
+</form>
+
+<!-- Form guardar config -->
+<form id="formConfig" method="POST" action="{% url 'guardar_config' %}">
+    {% csrf_token %}
+    <input type="hidden" name="focus_min" id="cfgFocusMin">
+    <input type="hidden" name="focus_seg" id="cfgFocusSeg">
+    <input type="hidden" name="descanso_corto_min" id="cfgCortoMin">
+    <input type="hidden" name="descanso_corto_seg" id="cfgCortoSeg">
+    <input type="hidden" name="descanso_largo_min" id="cfgLargoMin">
+    <input type="hidden" name="descanso_largo_seg" id="cfgLargoSeg">
+</form>
+
+<!-- Modal ajustes -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h2>⚙️ Ajustes del Temporizador</h2>
+
+        <div class="modal-grupo">
+            <label>Focus</label>
+            <div class="modal-inputs">
+                <input type="number" id="inputFocusMin" min="0" max="99" value="{{ config.focus_min }}">
+                <span>min</span>
+                <input type="number" id="inputFocusSeg" min="0" max="59" value="{{ config.focus_seg }}">
+                <span>seg</span>
+            </div>
+        </div>
+
+        <div class="modal-grupo">
+            <label>Descanso Corto</label>
+            <div class="modal-inputs">
+                <input type="number" id="inputCortoMin" min="0" max="99" value="{{ config.descanso_corto_min }}">
+                <span>min</span>
+                <input type="number" id="inputCortoSeg" min="0" max="59" value="{{ config.descanso_corto_seg }}">
+                <span>seg</span>
+            </div>
+        </div>
+
+        <div class="modal-grupo">
+            <label>Descanso Largo</label>
+            <div class="modal-inputs">
+                <input type="number" id="inputLargoMin" min="0" max="99" value="{{ config.descanso_largo_min }}">
+                <span>min</span>
+                <input type="number" id="inputLargoSeg" min="0" max="59" value="{{ config.descanso_largo_seg }}">
+                <span>seg</span>
+            </div>
+        </div>
+
+        <div class="modal-botones">
+            <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+            <button class="btn-guardar-config" onclick="guardarConfig()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<div class="timer-wrapper">
+
+    <div class="titulo">
+        <h1>Pomodoro SV</h1>
+        <p>Session Mode: Pomodoro</p>
+    </div>
+
+    <!-- Botón ajustes -->
+    <button class="btn-ajustes" onclick="abrirModal()">⚙️</button>
+
+    <!-- Selector materia -->
+    <div class="selector-materia">
+        <div>
+            <span>Materia activa</span>
+            <select id="selectMateria">
+                {% for materia in materias %}
+                    <option value="{{ materia.id }}">{{ materia.icono }} {{ materia.nombre }}</option>
+                {% empty %}
+                    <option value="">Sin materias</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab activo" onclick="cambiarModo('focus', this)">Focus</button>
+        <button class="tab" onclick="cambiarModo('descanso_corto', this)">Descanso Corto</button>
+        <button class="tab" onclick="cambiarModo('descanso_largo', this)">Descanso Largo</button>
+    </div>
+
+    <!-- Fase -->
+    <p class="fase-texto" id="textoFase">FASE 1/4 • SESIÓN DE TRABAJO</p>
+
+    <!-- Círculo -->
+    <div class="timer-circle-wrapper">
+        <svg width="300" height="300" viewBox="0 0 300 300">
+            <circle
+                cx="150" cy="150" r="130"
+                fill="none"
+                stroke="#e0e0d8"
+                stroke-width="10"
+            />
+            <circle
+                id="circuloProgreso"
+                cx="150" cy="150" r="130"
+                fill="none"
+                stroke="#0c6b37"
+                stroke-width="10"
+                stroke-linecap="round"
+                stroke-dasharray="816.81"
+                stroke-dashoffset="0"
+            />
+        </svg>
+
+        <div class="timer-display">
+            <div class="tiempo" id="tiempoDisplay">25:00</div>
+            <div class="estado-label" id="estadoLabel">FOCUS ACTIVO</div>
+        </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="botones">
+
+        <div class="btn-wrapper">
+            <button class="btn-accion" onclick="resetTimer()">↺</button>
+            <span class="btn-label">Reset</span>
+        </div>
+
+        <button class="btn-start" id="btnStart" onclick="toggleTimer()">
+            ▶ <span id="btnTexto">Start Pomodoro</span>
+    
+        </button>
+
+        <div class="btn-wrapper">
+            <button class="btn-accion" onclick="skipFase()">⏭</button>
+            <span class="btn-label">Skip</span>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // Tiempos desde DB
+    const TIEMPOS = {
+        focus: {{ config.focus_min }} * 60 + {{ config.focus_seg }},
+        descanso_corto: {{ config.descanso_corto_min }} * 60 + {{ config.descanso_corto_seg }},
+        descanso_largo: {{ config.descanso_largo_min }} * 60 + {{ config.descanso_largo_seg }}
+    };
+
+    const ETIQUETAS = {
+        focus: 'FOCUS ACTIVO',
+        descanso_corto: 'DESCANSO CORTO',
+        descanso_largo: 'DESCANSO LARGO'
+    };
+
+    const CIRCUMFERENCIA = 2 * Math.PI * 130;
+
+    let modoActual = 'focus';
+    let tiempoTotal = TIEMPOS.focus;
+    let tiempoRestante = TIEMPOS.focus;
+    let corriendo = false;
+    let intervalo = null;
+    let faseActual = 1;
+
+    const circulo = document.getElementById('circuloProgreso');
+    const display = document.getElementById('tiempoDisplay');
+    const estadoLabel = document.getElementById('estadoLabel');
+    const btnTexto = document.getElementById('btnTexto');
+    const textoFase = document.getElementById('textoFase');
+    const alarma = document.getElementById('alarma');
+
+    function formatearTiempo(segundos) {
+        const m = Math.floor(segundos / 60).toString().padStart(2, '0');
+        const s = (segundos % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    }
+
+    function actualizarCirculo() {
+        const progreso = tiempoRestante / tiempoTotal;
+        const offset = CIRCUMFERENCIA * (1 - progreso);
+        circulo.style.strokeDashoffset = offset;
+    }
+
+    function actualizarDisplay() {
+        display.textContent = formatearTiempo(tiempoRestante);
+        actualizarCirculo();
+    }
+
+    function cambiarModo(modo, btn) {
+        if (corriendo) pararTimer();
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('activo'));
+        btn.classList.add('activo');
+        modoActual = modo;
+        tiempoTotal = TIEMPOS[modo];
+        tiempoRestante = TIEMPOS[modo];
+        estadoLabel.textContent = ETIQUETAS[modo];
+        btnTexto.textContent = 'Start Pomodoro';
+        actualizarDisplay();
+    }
+
+    function toggleTimer() {
+        if (corriendo) {
+            pararTimer();
+        } else {
+            iniciarTimer();
+        }
+    }
+
+    function iniciarTimer() {
+        corriendo = true;
+        btnTexto.textContent = 'Pausar';
+        intervalo = setInterval(() => {
+            tiempoRestante--;
+            actualizarDisplay();
+            if (tiempoRestante <= 0) {
+                clearInterval(intervalo);
+                corriendo = false;
+                alarma.play();
+                tiempoCompleto();
+            }
+        }, 1000);
+    }
+
+    function pararTimer() {
+        clearInterval(intervalo);
+        corriendo = false;
+        btnTexto.textContent = 'Continuar';
+    }
+
+    function resetTimer() {
+        clearInterval(intervalo);
+        corriendo = false;
+        tiempoRestante = tiempoTotal;
+        btnTexto.textContent = 'Start Pomodoro';
+        actualizarDisplay();
+    }
+
+    function skipFase() {
+        clearInterval(intervalo);
+        corriendo = false;
+        avanzarFase();
+    }
+
+    function tiempoCompleto() {
+        guardarSesion(true);
+        avanzarFase();
+    }
+
+    function avanzarFase() {
+        if (modoActual === 'focus') {
+            if (faseActual < 4) {
+                faseActual++;
+                setModoSinTab('descanso_corto');
+            } else {
+                faseActual = 1;
+                setModoSinTab('descanso_largo');
+            }
+        } else {
+            if (modoActual === 'descanso_largo') faseActual = 1;
+            setModoSinTab('focus');
+        }
+        actualizarTextoFase();
+    }
+
+    function setModoSinTab(modo) {
+        modoActual = modo;
+        tiempoTotal = TIEMPOS[modo];
+        tiempoRestante = TIEMPOS[modo];
+        estadoLabel.textContent = ETIQUETAS[modo];
+        btnTexto.textContent = 'Start Pomodoro';
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('activo'));
+        const tabs = document.querySelectorAll('.tab');
+        if (modo === 'focus') tabs[0].classList.add('activo');
+        if (modo === 'descanso_corto') tabs[1].classList.add('activo');
+        if (modo === 'descanso_largo') tabs[2].classList.add('activo');
+        actualizarDisplay();
+    }
+
+    function actualizarTextoFase() {
+        if (modoActual === 'focus') {
+            textoFase.textContent = `FASE ${faseActual}/4 • SESIÓN DE TRABAJO`;
+        } else if (modoActual === 'descanso_corto') {
+            textoFase.textContent = `FASE ${faseActual}/4 • DESCANSO CORTO`;
+        } else {
+            textoFase.textContent = `DESCANSO LARGO • CICLO COMPLETADO`;
+        }
+    }
+
+    function guardarSesion(completada) {
+        const materiaId = document.getElementById('selectMateria').value;
+        if (!materiaId) return;
+        document.getElementById('inputMateriaId').value = materiaId;
+        document.getElementById('inputDuracion').value = Math.floor(tiempoTotal / 60);
+        document.getElementById('inputTipo').value = modoActual;
+        document.getElementById('inputCompletada').value = completada ? 'True' : 'False';
+        document.getElementById('formGuardar').submit();
+    }
+
+    // Modal
+    function abrirModal() {
+        document.getElementById('modalOverlay').classList.add('activo');
+    }
+
+    function cerrarModal() {
+        document.getElementById('modalOverlay').classList.remove('activo');
+    }
+
+    function guardarConfig() {
+        document.getElementById('cfgFocusMin').value = document.getElementById('inputFocusMin').value;
+        document.getElementById('cfgFocusSeg').value = document.getElementById('inputFocusSeg').value;
+        document.getElementById('cfgCortoMin').value = document.getElementById('inputCortoMin').value;
+        document.getElementById('cfgCortoSeg').value = document.getElementById('inputCortoSeg').value;
+        document.getElementById('cfgLargoMin').value = document.getElementById('inputLargoMin').value;
+        document.getElementById('cfgLargoSeg').value = document.getElementById('inputLargoSeg').value;
+        document.getElementById('formConfig').submit();
+    }
+
+    // Cerrar modal al clickear fuera
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) cerrarModal();
+    });
+
+    // Inicializar display
+    actualizarDisplay();
+</script>
+
+{% endblock %}

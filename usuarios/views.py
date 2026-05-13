@@ -14,7 +14,7 @@ def inicio_sesion(request):
 
         if usuario is not None:
             login(request, usuario)
-            return redirect("materias/materias.html")#Hacer cambio aqui al temporizador pomodoro
+            return redirect("pomodoro.html")#Hacer cambio aqui al temporizador pomodoro
         else:
             return render(request, "index.html", {
                 "error": "Usuario o contraseña incorrectos"
@@ -24,7 +24,7 @@ def inicio_sesion(request):
 
 
 def home(request):
-    return render(request, "/materias/materias.html") #hacer cambio aqui tambien al temporizador pomodoroffffffff
+    return render(request, "pomodoro.html") #hacer cambio aqui tambien al temporizador pomodoroffffffff
 
 
 def register(request):
