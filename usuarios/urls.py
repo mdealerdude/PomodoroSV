@@ -6,5 +6,5 @@ from . import views #from . significa de la misma carpeta
 urlpatterns=[
     path('', views.inicio_sesion, name='index'),
     path('registro/', views.register, name='registro'),
-    path('home.html/', views.home, name='home')
+    path('home/', views.home, name='home')
 ]

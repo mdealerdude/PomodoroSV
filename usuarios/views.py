@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 
-
+""""""
 def inicio_sesion(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -27,5 +27,6 @@ def home(request):
 
 
 def register(request):
+    
     return render(request, 'register.html')
 
